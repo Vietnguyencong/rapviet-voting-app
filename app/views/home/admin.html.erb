@@ -1,0 +1,57 @@
+<div class="container">
+    <h4 class="text-white">Users signed up: <%= @users.all.count %></h4>
+    <h4 class="text-white">Users voted: <%= get_total_votes %></h4>
+    <%= line_chart [
+        {name: "Users signed up", data: @users.group_by_day(:created_at).count},
+        {name: "Users voted", data: ActsAsVotable::Vote.all.group_by_day(:created_at).count}], lineWidth: 20, refresh: 60, 
+    library: {
+        animation: {easing: 'easeOutQuart'},
+        legend: {
+             labels: {
+                  fontColor: 'white'
+                 }
+              },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true,
+                    fontColor: 'white'
+                },
+            }],
+          xAxes: [{
+                ticks: {
+                    fontColor: 'white'
+                },
+            }]
+        } 
+    }  %>
+    <hr class="col col-9">
+    <h3 class="text-white">Rappers</h3>
+    <div class="row">
+    <table class="table table-dark table-hover table-sm" style="background-color: transparent;">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Vote(s)</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+      
+        <tbody>
+          <% @rappers.each do |rapper| %>
+            <tr>
+              <td><%= rapper.id %></td>
+              <td><%= link_to "<strong>#{rapper.name}</strong>".html_safe, rapper_path(rapper), class: "text-white" %></td>
+              <td><%= rapper.get_upvotes.size %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    
+    </div>
+    
+    
+
+</div>
+
